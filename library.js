@@ -1,22 +1,50 @@
 //Library 
 class Library {
-  constructor(bookName, authorName,availability) {
-    this.bookName = bookName;
-    this.authorName = authorName;
-    this.availability = availability;
+  constructor() {
+    this.catalog = [];
+  }
+  addBook(bookDetails)
+  {
+    this.catalog.push(bookDetails);
+  }
+  get getAllBook() {
+    return this.catalog;
+  }
+  findBookByTitle(bookTitle) {
+  let matchedBook=  this.catalog.find(book => {
+      return book.bookName === bookTitle
+    })
+    if (matchedBook) {
+     return console.log(`Book: ${matchedBook.bookName} -  Author: ${matchedBook.authorName} Status: Available`)
+    }
+    else return console.log(`This book is not available`)
   }
 }
-const bookDetails = [];
-bookDetails.push(new Library('Atomic Habits', 'James Clear', true));
-bookDetails.push(new Library('Deep Work', 'Cal Newport', true));
-bookDetails.push(new Library('The Pragmatic Programmer', 'Andrew Hunt & David Thomas', true));
-bookDetails.push(new Library('Show Your Work!', 'Austin Kleon', true));
-bookDetails.push(new Library('Can’t Hurt Me', 'David Goggins', true));
-bookDetails.push(new Library('So Good They Can’t Ignore You', 'Cal Newport', true));
-bookDetails.push(new Library('Clean Code', 'Robert C. Martin (Uncle Bob)', true));
 
-
-class UserDetails{
+let firstBook = {
+  bookName: 'Atomic Habits',
+  authorName: 'James Clear',
+  availability: true,
+};
+let secondBook = {
+  bookName: 'Deep Work',
+  authorName: 'Cal Newport',
+  availability: true,
+};
+                
+const library = new Library;
+library.addBook(firstBook);
+library.addBook(secondBook);
+// console.log(library.findBookByTitle('Deep Work'))
+// const bookDetails = [];
+// bookDetails.push(new Library('Atomic Habits', 'James Clear', true));
+// bookDetails.push(new Library('Deep Work', 'Cal Newport', true));
+// bookDetails.push(new Library('The Pragmatic Programmer', 'Andrew Hunt & David Thomas', true));
+// bookDetails.push(new Library('Show Your Work!', 'Austin Kleon', true));
+// bookDetails.push(new Library('Can’t Hurt Me', 'David Goggins', true));
+// bookDetails.push(new Library('So Good They Can’t Ignore You', 'Cal Newport', true));
+// bookDetails.push(new Library('Clean Code', 'Robert C. Martin (Uncle Bob)', true));
+class UserDetails extends Library{
    #userBorrowed = [];
   constructor(userName, id) {
     this.userName = userName;
@@ -76,11 +104,16 @@ class Admin extends UserDetails{
     }
 }
 class Member extends UserDetails {
+   #userBorrowed = [];
+  constructor(userName, id) {
+    this.userName = userName;
+    this.id = id;
+  }
   allBooks() {
     //Only available books details
     const bookDetails = this.checkBookAvailabitity()
     for (let books of bookDetails) {
-     console.log(`Book: ${books.bookName} -  Author: ${books.authorName} - ${books.availability='AVAIABLE'}`);
+     console.log(`Book: ${books.bookName} -  Author: ${books.authorName} - 'AVAIABLE'}`);
     }
     
   }
