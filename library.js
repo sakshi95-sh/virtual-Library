@@ -1,76 +1,82 @@
 //Library
 class Library {
+    
+  //Encapsulation Declaring the Variable Private
+    #catalog = [];
+    #historyLog = [];
   constructor() {
-    this.catalog = [];
-    this.historyLog = [];
   }
 
   //get all books
   get getAllBook() {
-    return this.catalog;
+    return this.#catalog;
   }
   //⁠insert a new book 
-  addBook(bookDetails) {
-    this.catalog.push(bookDetails);
-    console.log(this.catalog);
-    return this.catalog
+  set addBook(bookDetails) {
+    this.#catalog.push(bookDetails);
+    console.log(this.#catalog);
   }
   //delete a book
   remove(bookName) {
-   const matchedBookIndex=  this.catalog.findIndex(val => {
+   const matchedBookIndex=  this.#catalog.findIndex(val => {
       return val.bookName === bookName
    })
-    this.catalog.splice(matchedBookIndex, 1)
-    console.log(this.catalog)
+    this.#catalog.splice(matchedBookIndex, 1)
+    console.log(this.#catalog)
   
-    return this.catalog
+    return this.#catalog
+  }
+  //Helper funtion for RETURN AND BORROW
+  updateHistoryLog(bookName, userDetails, action) {
+   
+    const matchedBookIndex = this.#catalog.findIndex(val =>
+    { return val.bookName === bookName })
+
+    if (matchedBookIndex === -1) {
+        console.log("Book not found");
+          return;
+    }
+
+    if (action === "Borrowed" && !this.#catalog[matchedBookIndex].availability) {
+       console.log("Book is not available to borrow");
+      return;
+        }
+
+    if (action === "Returned" && this.#catalog[matchedBookIndex].availability) {
+      console.log("Book was not borrowed");
+      return;
+    }
+      const currentDate = new Date();
+      const logEntry = {
+        name: userDetails.name,
+        id: userDetails.id,
+        email:userDetails.email,
+        bookName: bookName,
+        action:action,
+        Date: `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`,
+      }   
+
+      this.#catalog[matchedBookIndex].availability = (action === "Corrowed") ? false : true;
+      return this.#historyLog.push(logEntry);
+    
   }
   //borrow a book
   borrow(bookName, userDetails) {
     //To Match The Books Details 
-    const matchedBookIndex = this.catalog.findIndex(val =>
-    { return val.bookName === bookName })
-    if (matchedBookIndex != -1 && this.catalog[matchedBookIndex].availability === true) {
-      const currentDate = new Date();
-      const borrowed = {
-        name: userDetails.name,
-        id: userDetails.id,
-        email:userDetails.email,
-        action: "borrowed",
-        bookName: bookName,
-        Date: `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()+1}`,
-      }   
-      this.catalog[matchedBookIndex].availability = false;
-      console.log(borrowed)
-      return this.historyLog.push(borrowed);
-    }
-    else return console.log(`This Book is not currently Available`);
+   this.updateHistoryLog(bookName,userDetails,"Borrowed")
   }
   //Return a  Book
   return(bookName,userDetails) {
-  const matchedBookIndex = this.catalog.findIndex(val =>
-    { return val.bookName === bookName })
-      const currentDate = new Date();
-      const borrowed = {
-        name: userDetails.name,
-        id: userDetails.id,
-        email:userDetails.email,
-        action: "Returned",
-        bookName: bookName,
-        Date: `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()+1}`,
-      }   
-      this.catalog[matchedBookIndex].availability = false;
-      console.log(borrowed)
-      return this.historyLog.push(borrowed);
+   this.updateHistoryLog(bookName,userDetails,"Returned")
   }
   history(id) {
     if (id === null) {
-            console.log(this.historyLog)
-      return this.historyLog
+            console.log(this.#historyLog)
+      return this.#historyLog
     }
     else {
-      console.log(this.historyLog)
-      const userHisory = this.historyLog.filter((val) => {
+      console.log(this.#historyLog)
+      const userHisory = this.#historyLog.filter((val) => {
         return val.id === id
       })
       console.log(userHisory)
@@ -79,7 +85,7 @@ class Library {
   }
   // Get Available Book
   availableBook() {
-    const availableBooks=  this.catalog.filter(val => {
+    const availableBooks=  this.#catalog.filter(val => {
       return val.availability === true
     })
     return availableBooks.forEach(book =>
@@ -118,7 +124,7 @@ class Admin extends User{
     return this.library.history(id);
   }
   addBook(bookDetails) {
-    return this.library.addBook(bookDetails)
+    return this.library.addBook = bookDetails;
   }
 
   remove(bookName) {
@@ -176,12 +182,12 @@ const eighthBook = {
 };
 
 const library = new Library;
-library.addBook(firstBook);
-library.addBook(secondBook);
-library.addBook(thirdBook);
-library.addBook(fourthBook);
-library.addBook(eighthBook);
-library.addBook(sixthBook);
+library.addBook=firstBook;
+library.addBook=secondBook;
+library.addBook = thirdBook;
+library.addBook=fourthBook;
+library.addBook=eighthBook;
+library.addBook = sixthBook;
 const user1 = new User('abc', 'abd@xyz.com', 12,'user', library);
 user1.borrow('Mindset: The New Psychology of Success', user1)
 user1.return('Mindset: The New Psychology of Success', user1)
