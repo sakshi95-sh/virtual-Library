@@ -5,7 +5,7 @@ A simple Object-Oriented JavaScript application that simulates a digital library
 
 | Pillar              | How It’s Implemented in `User`                   | 
 |---------------------|--------------------------------------------------|
-| ✅ Encapsulation     | Properties like `name`, `email`, `id`, `role`, `library` are bundled inside the object |
+| ✅ Encapsulation     |Declared the catalog and historyLog private to the Library Class|
 | ✅ Abstraction       | Methods like `borrow()`, `return()`, `history()` hide the complex logic of `Library` methods | 
 | ✅ Inheritance       | `Admin` extends `User` to reuse user features    | 
 | ✅ Polymorphism      | `history()` method behaves differently in `Admin` (shows all logs) and `User` (shows personal logs) |
